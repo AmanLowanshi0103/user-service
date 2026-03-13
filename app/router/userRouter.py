@@ -21,6 +21,9 @@ def health_check():
 
 @router.post("/create")
 def createUser(userData : userData, db: Session=Depends(get_db)):
+    existing_user = db.query(User).filter(User.email == userData.email).first()
+    # if existing_user:
+    #     raise HTTPException(status_code=400, detail="Email already registered")
     user=User(name=userData.name, password=userData.password, email=userData.email)
     db.add(user)
     db.commit()
